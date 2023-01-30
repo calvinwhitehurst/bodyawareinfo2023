@@ -1,0 +1,230 @@
+<%- include('partials/header.ejs'); %>
+<h1>Sales Insights</h1>
+<h2>Shows sales from last 10 days. (Still in development)</h2>
+<% for (var i = 0; i < data.length; i++) { %>
+<% for (var j = 0; j < data[i].orders.length; j++) { %>
+<% data[i].orders[j].total_price = parseFloat(data[i].orders[j].total_price); %>
+<% data[i].orders[j].name = data[i].orders[j].name.replace(/[^a-zA-Z]/g, ''); %>
+
+<% } %>
+<% } %>
+
+
+<script type="text/javascript">
+
+  var finalData = <% - JSON.stringify(data) %>;
+  var data = [];
+  var finalArray = [];
+  for (var j = 0; j < finalData.length; j++) {
+    data[j] = [];
+    var object = {};
+    for (var i = 0; i < finalData[j].orders.length; i++) {
+      var date = finalData[j].orders[i].created_at;
+      var localDateString = (new Date(date).getMonth() + 1) + '-' + new Date(date).getDate() + '-' + new Date(date).getFullYear();
+      if (object[localDateString]) {
+        object[localDateString].total_price += finalData[j].orders[i].total_price;
+        object[localDateString].total_price = parseFloat(object[localDateString].total_price.toFixed(2));
+      } else {
+        finalData[j].orders[i].Date = localDateString;
+        delete finalData[j].orders[i].created_at;
+        object[localDateString] = finalData[j].orders[i];
+      }
+    }
+    for (var prop in object) {
+      data[j].push(object[prop]);
+    }
+  }
+  data = [].concat.apply([], data);
+  data.sort(function compare(a, b) {
+    var dateA = new Date(a.Date);
+    var dateB = new Date(b.Date);
+    return dateA - dateB;
+  });
+  for (var k = 0; k < data.length; k++) {
+    if (data[k].name === "BAUS") {
+      data[k].BAUS = data[k].total_price;
+    } else if (data[k].name === "XDUS") {
+      data[k].XDUS = data[k].total_price;
+      // } else if (data[k].name === "EL"){
+      //     data[k].EL = data[k].total_price;
+    } else if (data[k].name === "BAGB") {
+      data[k].BAUK = data[k].total_price;
+    } else if (data[k].name === "XDGB") {
+      data[k].XDUK = data[k].total_price;
+    }
+    delete data[k].name;
+    delete data[k].total_price;
+
+  }
+  var obj = {};
+  for (var i = 0; i < data.length; i++) {
+    var date = data[i].Date;
+    // Get previous date saved inside the result
+    var p_date = obj[date] || {};
+    // Merge the previous date with the next date
+    obj[date] = Object.assign(p_date, data[i]);
+  }
+
+  //Convert to an array
+  data = Object.values(obj);
+  function moveObjectElement(currentKey, afterKey, obj) {
+    var result = {};
+    var val = obj[currentKey];
+    delete obj[currentKey];
+    var next = -1;
+    var i = 0;
+    if (typeof afterKey == 'undefined' || afterKey == null) afterKey = '';
+    $.each(obj, function (k, v) {
+      if ((afterKey == '' && i == 0) || next == 1) {
+        result[currentKey] = val;
+        next = 0;
+      }
+      if (k == afterKey) { next = 1; }
+      result[k] = v;
+      ++i;
+    });
+    if (next == 1) {
+      result[currentKey] = val;
+    }
+    if (next !== -1) return result; else return obj;
+  }
+  ///
+  for (var i = 0; i < data.length; i++) {
+    data[i] = moveObjectElement('XDUK', '', data[i]);
+    data[i] = moveObjectElement('BAUK', '', data[i]);
+    data[i] = moveObjectElement('XDUS', '', data[i]);
+    data[i] = moveObjectElement('BAUS', '', data[i]);
+    data[i] = moveObjectElement('Date', '', data[i]);
+  }
+  console.log(data);
+
+  ////
+  var margin = { top: 20, right: 160, bottom: 35, left: 30 };
+
+  var width = 1300 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+  var svg = d3.select("body")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  //   var parse = d3.time.format("%B %d, %Y").parse;
+  // Transpose the data into layers
+  var dataset = d3.layout.stack()(["BAUS", "XDUS", "BAUK", "XDUK"].map(function (stores) {
+    return data.map(function (d) {
+      return { x: d.Date, y: +d[stores] };
+    });
+  }));
+
+  // Set x, y and colors
+  var x = d3.scale.ordinal()
+    .domain(dataset[0].map(function (d) { return d.x; }))
+    .rangeRoundBands([10, width - 10], 0.02);
+
+  var y = d3.scale.linear()
+    .domain([0, d3.max(dataset, function (d) { return d3.max(d, function (d) { return d.y0 + d.y; }); })])
+    .range([height, 0]);
+
+  var colors = ["b3bef7", "#ff7373", "#73ff73", "#d0ff73"];
+
+  // Define and draw axes
+  var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .ticks(5)
+    .tickSize(-width, 0, 0)
+    .tickFormat(function (d) { return d });
+
+  var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+  //   .tickFormat(d3.time.format("%B %d, %Y"));
+
+  svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis);
+
+  svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+
+  // Create groups for each series, rects for each segment 
+  var groups = svg.selectAll("g.cost")
+    .data(dataset)
+    .enter().append("g")
+    .attr("class", "cost")
+    .style("fill", function (d, i) { return colors[i]; });
+  var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+  var rect = groups.selectAll("rect")
+    .data(function (d) { return d; })
+    .enter()
+    .append("rect")
+    .attr("x", function (d) { return x(d.x); })
+    .attr("y", function (d) { return y(d.y0 + d.y); })
+    .attr("height", function (d) { return y(d.y0) - y(d.y0 + d.y); })
+    .attr("width", x.rangeBand())
+    .on("mouseover", function (d) {
+      tooltip.style("display", null);
+    })
+    .on("mouseout", function () { tooltip.style("display", "none"); })
+    .on("mousemove", function (d) {
+      var xPosition = d3.mouse(this)[0] - 15;
+      var yPosition = d3.mouse(this)[1] - 25;
+      tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+      tooltip.select("text").text(d.y);
+    });
+
+  // Draw legend
+  var legend = svg.selectAll(".legend")
+    .data(colors)
+    .enter().append("g")
+    .attr("class", "legend")
+    .attr("transform", function (d, i) { return "translate(30," + i * 19 + ")"; });
+
+  legend.append("rect")
+    .attr("x", width - 18)
+    .attr("width", 18)
+    .attr("height", 18)
+    .style("fill", function (d, i) { return colors.slice().reverse()[i]; });
+
+  legend.append("text")
+    .attr("x", width + 5)
+    .attr("y", 9)
+    .attr("dy", ".35em")
+    .style("text-anchor", "start")
+    .text(function (d, i) {
+      switch (i) {
+        case 0: return "XDress UK";
+        case 1: return "Body Aware UK";
+        case 2: return "XDress USA";
+        case 3: return "Body Aware USA";
+      }
+    });
+  // Prep the tooltip bits, initial display is hidden
+  var tooltip = svg.append("g")
+    .attr("class", "tooltip")
+    .style("display", "none");
+
+  tooltip.append("rect")
+    .attr("width", 50)
+    .attr("height", 20)
+    .attr("fill", "grey")
+    .attr("text-align", "center")
+    .style("opacity", 0.5);
+
+  tooltip.append("text")
+    .attr("x", 15)
+    .attr("dy", "1.2em")
+    .style("text-anchor", "left")
+    .attr("font-size", "12px")
+    .style("fill", "black");
+
+</script>
+
+<%- include('partials/footer.ejs'); %>

@@ -1,0 +1,106 @@
+<%- include('partials/header.ejs'); %>
+<script type="text/javascript">
+  $(function () {
+    $(".ui.search.epic").search({
+      apiSettings: {
+        url: "../searchepic?q=%{query}"
+      },
+      maxResults: 15
+    });
+  });
+</script>
+
+<div id="content-outer">
+  <div id="content">
+    <h1>Search For An Epic Leopard Product</h1>
+    <div id="content-inner">
+      <div class="page-content">
+        <h3>Enter sku or name below.</h3>
+        <br />
+        <form method="post" action="/searchepic" id="search">
+          <div class="ui input search epic">
+            <div class="ui icon massive input">
+              <input type="text" class="prompt" name="search" value="" placeholder="CB1000" />
+              <i class="search icon"></i>
+            </div>
+            <div class="results"></div>
+          </div>
+          <input type="submit" value="Search" class="ui button" />
+        </form>
+        <br />
+        <br />
+        <a class="edit" data-id="add" href="#">Add a new SKU</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="ui mini modal" id="modal-add">
+  <div class="header">
+    Add Epic Leopard Product
+  </div>
+  <div class="content">
+    <form class="ui form" method="post" action="/addNewEpic">
+      <div class="field">
+        <label>Name</label>
+        <input type="text" name="title" value="">
+      </div>
+      <div class="field">
+        <label>Our SKU</label>
+        <input type="text" name="oursku" value="">
+      </div>
+      <div class="field">
+        <label>Their SKU</label>
+        <input type="text" name="theirsku" value="">
+      </div>
+      <div class="field">
+        <label>Vendor</label>
+        <input type="text" name="vendor" value="">
+      </div>
+      <div class="field">
+        <label>Our Price</label>
+        <input type="text" name="ourprice" value="">
+      </div>
+      <div class="field">
+        <label>Wholesale Price</label>
+        <input type="text" name="theirprice" value="">
+      </div>
+      <div class="field">
+        <label>Image Url</label>
+        <input type="text" name="image_url" value="">
+      </div>
+      <div class="field">
+        <label>Handle</label>
+        <input type="text" name="handle" value="">
+      </div>
+  </div>
+  <div class="actions">
+    <div class="ui negative button">
+      Cancel
+    </div>
+    <button class="ui positive right labeled icon button" type="submit">
+      Submit
+      <i class="checkmark icon"></i>
+    </button>
+    </form>
+  </div>
+</div>
+<script>
+  $(".menu .item").tab();
+
+  $(function () {
+    $("#test").click(function () {
+      $(".test").modal("show");
+    });
+    $(".test").modal({
+      closable: true
+    });
+    $(".edit").click(function (event) {
+      var card_clicked = $(this).attr("data-id");
+      $("#modal-" + card_clicked).modal("show");
+    });
+    $("#modal-" + card_clicked).modal({
+      closable: true
+    });
+  });
+</script>
+<%- include('partials/footer.ejs'); %>

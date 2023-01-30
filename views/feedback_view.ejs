@@ -1,0 +1,70 @@
+<%- include('partials/header.ejs'); %>
+<h1>Feedback Log For <%= obj1[0].sku %></h1>
+<h3>Product has been requested <%= obj3[0].count %> times.</h3>
+<div class="ui ribbon label">
+    <h3>Feedback Entries</h3>
+</div>
+<table id="data" class="ui celled table">
+    <thead>
+        <tr>
+            <th><i>Date</i></th>
+            <th><i>Name</i></th>
+            <th><i>Email</i></th>
+            <th><i>Product</i></th>
+            <th><i>Feedback</i></th>
+            <th><i>Source</i></th>
+            <th><i>Author</i></th>
+        </tr>
+    </thead>
+    <tbody>
+        <% var x = 0; %>
+        <% if (x < obj2.length) { %>
+        <% for (var i = 0; i < obj2.length; i++) { %>
+        <tr>
+            <td class="collapsing"><%= moment(obj2[i].date).format("MMM Do, YYYY") %></td>
+            <td><%= obj2[i].name %></td>
+            <td><%= obj2[i].email %></td>
+            <td><%= obj2[i].sku %></td>
+            <td><%= obj2[i].comment %></td>
+            <td><%= obj2[i].source %></td>
+            <td><%= obj2[i].author %></td>
+        </tr>
+        <% } %>
+        <% } else { %>
+        <tr>
+            <td colspan="5">Nothing on file.&nbsp;</td>
+        </tr>
+        <% }; %>
+    </tbody>
+</table>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#data').after('<div class="ui right floated pagination menu"></div>');
+        var rowsShown = 10;
+        var rowsTotal = $('#data tbody tr').length;
+        var numPages = rowsTotal / rowsShown;
+        for (i = 0; i < numPages; i++) {
+            var pageNum = i + 1;
+            $('.ui.right.floated.pagination.menu').append('<a href="#/" class="item" rel="' + i + '">' + pageNum + '</a> ');
+        }
+        $('#data tbody tr').hide();
+        $('#data tbody tr').slice(0, rowsShown).show();
+        $('.ui.right.floated.pagination.menu a:first').addClass('active');
+        $('.ui.right.floated.pagination.menu a').bind('click', function () {
+
+            $('.ui.right.floated.pagination.menu a').removeClass('active');
+            $(this).addClass('active');
+            var currPage = $(this).attr('rel');
+            var startItem = currPage * rowsShown;
+            var endItem = startItem + rowsShown;
+            $('#data tbody tr').css('opacity', '0.0').hide().slice(startItem, endItem).
+                css('display', 'table-row').animate({ opacity: 1 }, 300);
+        });
+    });
+</script>
+
+
+<%- include('partials/footer.ejs'); %>

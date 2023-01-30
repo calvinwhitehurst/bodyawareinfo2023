@@ -1,0 +1,39 @@
+<%- include('partials/header.ejs'); %>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#thumbnail').typeahead({
+            name: 'searchFeedback',
+            remote: 'http://localhost:3000/feedback_search_table?key=%QUERY',
+            limit: 1
+        });
+    });    
+</script>
+<% if(obj.length>0){ %>
+
+<h3><%= obj.length %> Products Found</h3>
+<table cellspacing="0" cellpadding="0" border="0" width="50%" class="ui celled padded table product-table">
+    <thead>
+        <tr>
+            <th>SKU Code</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <% var x = 0;%>
+        <% for (var i = 0; i < obj.length; i++){ x++; %>
+        <tr <% if (x % 2) { %> class="alt-row" <% } %>>
+            <td>
+                <a href="/feedback_view/<%= obj[i].sku %>"><%= obj[i].sku %></a>
+            </td>
+        </tr>
+        <% } %>
+    </tbody>
+</table>
+<% }else{ %>
+<strong>Sorry, unable to find any products matching your search.</strong>
+<br>
+<br>
+<a href="/feedback">Go back to search</a>
+
+<% }; %>
+<%- include('partials/footer.ejs'); %>

@@ -1,0 +1,124 @@
+<%- include('partials/header.ejs'); %> <% if(obj.length>0){ %>
+
+<h3><%= obj.length %> Results Found</h3>
+<table cellspacing="0" cellpadding="0" border="0" width="100%" class="ui celled padded table product-table">
+  <thead>
+    <tr>
+      <th class="table-header-repeat line-left"><b>Image</b></th>
+      <th class="table-header-repeat line-left"><b>Name</b></th>
+      <th class="table-header-repeat line-left"><b>Sku</b></th>
+      <th class="table-header-repeat line-left"><b>Vendor Sku</b></th>
+      <th class="table-header-repeat line-left"><b>Price On Site</b></th>
+      <th class="table-header-repeat line-left"><b>Cost Per Item</b></th>
+      <th class="table-header-repeat line-left"><b>Vendor</b></th>
+      <th class="table-header-repeat line-left"><b>Edit</b></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% var x = 0;%> <% for (var i = 0; i < obj.length; i++){ x++; %>
+    <tr>
+      <td>
+        <img width="25%" src="<%= obj[i].image_src %>" />
+      </td>
+      <td>
+        <%= obj[i].title %>
+      </td>
+      <td>
+        <%= obj[i].variant_sku %>
+      </td>
+      <td>
+        <%= obj[i].variant_barcode %>
+      </td>
+      <td>
+        <%= obj[i].variant_price %>
+      </td>
+      <td>
+        <%= obj[i].cost_per_item %>
+      </td>
+      <td>
+        <%= obj[i].vendor %>
+      </td>
+      <td>
+        <a class="edit" data-id="<%= obj[i].variant_sku %>" href="#">Edit</a>
+      </td>
+    </tr>
+    <% } %>
+  </tbody>
+</table>
+<% for (var i = 0; i < obj.length; i++){ %>
+
+<div class="ui mini modal" id="modal-<%= obj[i].variant_sku %>">
+  <div class="header">
+    Edit <%= obj[i].name %> Epic Leopard Product
+  </div>
+  <div class="content">
+    <form class="ui form" method="post" action="/searchepic/<%= obj[i].variant_sku %>">
+      <div class="field">
+        <label>Name</label>
+        <input type="text" name="title" value="<%= obj[i].title %>">
+      </div>
+      <div class="field">
+        <label>Our SKU</label>
+        <input type="text" name="oursku" value="<%= obj[i].variant_sku %>">
+      </div>
+      <div class="field">
+        <label>Their SKU</label>
+        <input type="text" name="theirsku" value="<%= obj[i].variant_barcode %>">
+      </div>
+      <div class="field">
+        <label>Vendor</label>
+        <input type="text" name="vendor" value="<%= obj[i].vendor %>">
+      </div>
+      <div class="field">
+        <label>Our Price</label>
+        <input type="text" name="ourprice" value="<%= obj[i].variant_price %>">
+      </div>
+      <div class="field">
+        <label>Wholesale Price</label>
+        <input type="text" name="theirprice" value="<%= obj[i].cost_per_item %>">
+      </div>
+      <div>
+        <a href="/searchepic/<%= obj[i].variant_sku %>">Delete Product</a>
+      </div>
+  </div>
+  <div class="actions">
+    <div class="ui negative button">
+      Cancel
+    </div>
+    <button class="ui positive right labeled icon button" type="submit">
+      Submit
+      <i class="checkmark icon"></i>
+    </button>
+    </form>
+  </div>
+</div>
+<% } %>
+<% }else{ %>
+<strong>Sorry, unable to find any items matching your search.</strong>
+<% }; %>
+<br />
+<br />
+<a href="../epicvendor">Go back to search</a>
+<script>
+  $('.menu .item')
+    .tab();
+
+  $(function () {
+    $("#test").click(function () {
+      $(".test").modal('show');
+    });
+    $(".test").modal({
+      closable: true
+    });
+    $(".edit").click(function (event) {
+      var card_clicked = $(this).attr('data-id');
+      $("#modal-" + card_clicked).modal('show');
+    });
+    $("#modal-" + card_clicked).modal({
+      closable: true
+    });
+  });
+
+
+</script>
+<%- include('partials/footer.ejs'); %>

@@ -1,0 +1,8 @@
+<%- include('partials/header.ejs'); %>
+<h1>Live Chat</h1>
+<% for(var i = 0; i < rows.length; i++) { %>
+<div class="left floated author">
+    <a class="item" href="../michael"><img class="ui avatar image" src="/img/matt.jpg"><%= rows[i].username %></a>
+</div>
+<% } %>
+<%- include('partials/footer.ejs'); %>

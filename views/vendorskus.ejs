@@ -1,0 +1,278 @@
+<%- include('partials/header.ejs'); %>
+<h1>Vendor Skus</h1>
+<div class="ui pointing secondary demo menu">
+  <a class="active blue item" data-tab="first">Be Wicked</a>
+  <a class="blue item" data-tab="second">Coquette</a>
+  <a class="blue item" data-tab="third">Lady Burd</a>
+  <a class="blue item" data-tab="fourth">Leg Avenue</a>
+  <a class="blue item" data-tab="fifth">Pleaser</a>
+  <a class="blue item" data-tab="sixth">Shirley Of Hollywood</a>
+</div>
+
+<div class="ui active tab segment" data-tab="first">
+  <table class="ui single line table">
+    <thead>
+      <tr>
+        <th>Product Name</th>
+        <th>Body Aware Sku</th>
+        <th>Vendor Sku</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% var bewicked = obj[0]; %>
+      <% for (var i = 0; i < bewicked.length; i++){ %>
+      <tr>
+        <td><%= bewicked[i].title %></td>
+        <td><%= bewicked[i].sku %></td>
+        <td><%= bewicked[i].vsku %></td>
+        <td><a href="/bewicked/<%= bewicked[i].id %>">Delete</a></td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+  <h3>Add A Sku</h3>
+  <form action="/bewicked" method="post" id="app5">
+    <div class="ui form">
+      <div class="fields">
+        <div class="field">
+          <label>Product Name</label>
+          <input type="text" placeholder="Some Product" name="title">
+        </div>
+        <div class="field">
+          <label>Our Sku</label>
+          <input type="text" placeholder="X100" name="sku">
+        </div>
+        <div class="field">
+          <label>Vendor Sku</label>
+          <input type="text" placeholder="X300" name="vsku">
+        </div>
+      </div>
+    </div>
+    <button class="ui button" type="submit" form="app5">Save Product</button>
+  </form>
+</div>
+<div class="ui tab segment" data-tab="second">
+  <table class="ui single line table">
+    <thead>
+      <tr>
+        <th>Product Name</th>
+        <th>Body Aware Sku</th>
+        <th>Vendor Sku</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% var coquette = obj[1]; %>
+      <% for (var i = 0; i < coquette.length; i++){ %>
+      <tr>
+        <td><%= coquette[i].title %></td>
+        <td><%= coquette[i].sku %></td>
+        <td><%= coquette[i].vsku %></td>
+        <td><a href="/coquette/<%= coquette[i].id %>">Delete</a></td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+  <h3>Add A Sku</h3>
+  <form action="/coquette" method="post" id="app4">
+    <div class="ui form">
+      <div class="fields">
+        <div class="field">
+          <label>Product Name</label>
+          <input type="text" placeholder="Some Product" name="title">
+        </div>
+        <div class="field">
+          <label>Our Sku</label>
+          <input type="text" placeholder="X100" name="sku">
+        </div>
+        <div class="field">
+          <label>Vendor Sku</label>
+          <input type="text" placeholder="X300" name="vsku">
+        </div>
+      </div>
+    </div>
+    <button class="ui button" type="submit" form="app4">Save Product</button>
+  </form>
+</div>
+<div class="ui tab segment" data-tab="third">
+  <table class="ui single line table">
+    <thead>
+      <tr>
+        <th>Product Name</th>
+        <th>Body Aware Sku</th>
+        <th>Vendor Sku</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% var ladyburd = obj[2]; %>
+      <% for (var i = 0; i < ladyburd.length; i++){ %>
+      <tr>
+        <td><%= ladyburd[i].title %></td>
+        <td><%= ladyburd[i].sku %></td>
+        <td><%= ladyburd[i].vsku %></td>
+        <td><a href="/ladyburd/<%= ladyburd[i].id %>">Delete</a></td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+  <h3>Add A Sku</h3>
+  <form action="/ladyburd" method="post" id="app3">
+    <div class="ui form">
+      <div class="fields">
+        <div class="field">
+          <label>Product Name</label>
+          <input type="text" placeholder="Some Product" name="title">
+        </div>
+        <div class="field">
+          <label>Our Sku</label>
+          <input type="text" placeholder="X100" name="sku">
+        </div>
+        <div class="field">
+          <label>Vendor Sku</label>
+          <input type="text" placeholder="X300" name="vsku">
+        </div>
+      </div>
+    </div>
+    <button class="ui button" type="submit" form="app3">Save Product</button>
+  </form>
+</div>
+<div class="ui tab segment" data-tab="fourth">
+  <table class="ui single line table">
+    <thead>
+      <tr>
+        <th>Product Name</th>
+        <th>Body Aware Sku</th>
+        <th>Vendor Sku</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% var leg_avenue = obj[3]; %>
+      <% for (var i = 0; i < leg_avenue.length; i++){ %>
+      <tr>
+        <td><%= leg_avenue[i].title %></td>
+        <td><%= leg_avenue[i].sku %></td>
+        <td><%= leg_avenue[i].vsku %></td>
+        <td><a href="/leg_avenue/<%= leg_avenue[i].id %>">Delete</a></td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+  <h3>Add A Sku</h3>
+  <form action="/leg_avenue" method="post" id="app2">
+    <div class="ui form">
+      <div class="fields">
+        <div class="field">
+          <label>Product Name</label>
+          <input type="text" placeholder="Some Product" name="title">
+        </div>
+        <div class="field">
+          <label>Our Sku</label>
+          <input type="text" placeholder="X100" name="sku">
+        </div>
+        <div class="field">
+          <label>Vendor Sku</label>
+          <input type="text" placeholder="X300" name="vsku">
+        </div>
+      </div>
+    </div>
+    <button class="ui button" type="submit" form="app2">Save Product</button>
+  </form>
+</div>
+<div class="ui tab segment" data-tab="fifth">
+  <table class="ui single line table">
+    <thead>
+      <tr>
+        <th>Product Name</th>
+        <th>Body Aware Sku</th>
+        <th>Vendor Sku</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% var pleaser = obj[4]; %>
+      <% for (var i = 0; i < pleaser.length; i++){ %>
+      <tr>
+        <td><%= pleaser[i].title %></td>
+        <td><%= pleaser[i].sku %></td>
+        <td><%= pleaser[i].vsku %></td>
+        <td><a href="/pleaser/<%= pleaser[i].id %>">Delete</a></td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+  <h3>Add A Sku</h3>
+  <form action="/pleaser" method="post" id="app1">
+    <div class="ui form">
+      <div class="fields">
+        <div class="field">
+          <label>Product Name</label>
+          <input type="text" placeholder="Some Product" name="title">
+        </div>
+        <div class="field">
+          <label>Our Sku</label>
+          <input type="text" placeholder="X100" name="sku">
+        </div>
+        <div class="field">
+          <label>Vendor Sku</label>
+          <input type="text" placeholder="X300" name="vsku">
+        </div>
+      </div>
+    </div>
+    <button class="ui button" type="submit" form="app1">Save Product</button>
+  </form>
+</div>
+<div class="ui tab segment" data-tab="sixth">
+  <table class="ui single line table">
+    <thead>
+      <tr>
+        <th>Product Name</th>
+        <th>Body Aware Sku</th>
+        <th>Vendor Sku</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% var shirley_of_hollywood = obj[5]; %>
+      <% for (var i = 0; i < shirley_of_hollywood.length; i++){ %>
+      <tr>
+        <td><%= shirley_of_hollywood[i].title %></td>
+        <td><%= shirley_of_hollywood[i].sku %></td>
+        <td><%= shirley_of_hollywood[i].vsku %></td>
+        <td><a href="/shirley_of_hollywood/<%= shirley_of_hollywood[i].id %>">Delete</a></td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+  <h3>Add A Sku</h3>
+  <form action="/shirley_of_hollywood" method="post" id="app">
+    <div class="ui form">
+      <div class="fields">
+        <div class="field">
+          <label>Product Name</label>
+          <input type="text" placeholder="Some Product" name="title">
+        </div>
+        <div class="field">
+          <label>Our Sku</label>
+          <input type="text" placeholder="X100" name="sku">
+        </div>
+        <div class="field">
+          <label>Vendor Sku</label>
+          <input type="text" placeholder="X300" name="vsku">
+        </div>
+      </div>
+    </div>
+    <button class="ui button" type="submit" form="app">Save Product</button>
+  </form>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('.demo.menu .item').tab({ history: false });
+  });
+
+</script>
+
+<%- include('partials/footer.ejs'); %>

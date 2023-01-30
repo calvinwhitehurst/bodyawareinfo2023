@@ -1,0 +1,71 @@
+<%- include('partials/header.ejs'); %>
+<h1>Inventory Page</h1>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#products_search').typeahead({
+            name: 'searchInventory',
+            remote: '../searchInventory?key=%QUERY',
+            limit: 10
+        });
+        $('#message').fadeIn('slow', function () {
+            $('#message').delay(3000).fadeOut();
+        });
+    });    
+</script>
+<% if (typeof SuccessMessage !== 'undefined') { %>
+<div class="ui green message" id="message">
+    <div class="header">
+        <%= SuccessMessage %>
+    </div>
+</div>
+<% } %>
+<% if (typeof FailureMessage !== 'undefined') { %>
+<div class="ui red message" id="message">
+    <div class="header">
+        <%= FailureMessage %>
+    </div>
+</div>
+<% } %>
+<div id="content-outer">
+    <div id="content">
+        <div id="content-inner">
+            <div class="page-content">
+                <h3>Enter product code or partial code for inventory stats.</h3>
+                <br />
+                <form method="post" action="/searchInventory" id="search">
+                    <table border="0" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <td>
+                                <div class='ui input'><input type="text" id="products_search" name="searchInventory"
+                                        style="width: 300px;" value="" /></div>
+                            </td>
+                            <td valign="top">
+                                <input type="submit" value="Search" class="ui button">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var elements = document.getElementsByClassName("arrow-togglable");
+    var currentIndex = 0;
+
+    document.onkeydown = function (e) {
+        switch (e.keyCode) {
+            case 38:
+                currentIndex = (currentIndex == 0) ? elements.length - 1 : --currentIndex;
+                elements[currentIndex].focus();
+                break;
+            case 40:
+                currentIndex = ((currentIndex + 1) == elements.length) ? 0 : ++currentIndex;
+                elements[currentIndex].focus();
+                break;
+        }
+    }
+
+</script>
+<%- include('partials/footer.ejs'); %>

@@ -1,0 +1,75 @@
+<% include partials/header %>
+<% var prefix = 1; %>
+    <h1>Order : <% if (prefix == rows[0].ord_web_id){ %>
+    BA<% } else { %>XD<% }; %><%= rows[0].ord_id %></h1>
+        <div><h3>Line Items</h3></div>
+                    <table class="top attached ui basic table">
+                        <thead>
+                            <tr>
+                            <th><i>Sku #</i></th>
+                            <th><i>Quant.</i></th>
+                            <th><i>Item Name</i></th>
+                            <th><i>Price</i></th>
+                            </tr>
+                            </thead>
+                            <tbody>    
+<% var x = 0; %>
+<% if (x < rows[0].length) { %>
+<% for (var i = 0; i < rows[0].length; i++) { %>
+                        <tr>
+                            <td><%= rows[i].prd_code %></td>
+                            <td>#</td>
+                            <td><%= rows[i].prd_name %></td>
+                            <td class="right aligned collapsing"><%= accounting.formatMoney(rows[i].lit_price); %></td>
+                        </tr>
+<% } %>
+<% } else { %>
+                        <tr>
+                            <td colspan="5">Nothing on file.&nbsp;</td>
+                        </tr>
+<% }; %>
+                    </tbody>
+                </table>
+                <br/>
+                <table class="ui very basic collapsing celled table">
+                <tr>
+                        <td><b>Subtotal</b></td>
+                        <td>
+                        <%= accounting.formatMoney(rows[0].ord_subtotal) %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Shipping</b></td>
+                        <td>
+                        <%= accounting.formatMoney(rows[0].ord_shipping) %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Tax</b></td>
+                        <td>
+                        <%= accounting.formatMoney(rows[0].ord_tax) %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Discount</b></td>
+                        <td>
+                        <%= accounting.formatMoney(rows[0].ord_discount) %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Total</b></td>
+                        <td>
+                        <%= accounting.formatMoney(rows[0].ord_total) %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Order Status</b></td>
+                        <td>
+                        <%= rows[0].ord_status %>
+                        </td>
+                    </tr>
+                </table>
+
+       
+
+<% include partials/footer %>

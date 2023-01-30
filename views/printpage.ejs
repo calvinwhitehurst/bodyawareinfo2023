@@ -1,0 +1,189 @@
+<html>
+    <head>
+        <title><%= storeData.name %> Order Printer</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.1/dist/semantic.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.min.css">
+        <script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/barcodes/JsBarcode.code128.min.js"></script>  
+        <style>
+        @page { 
+            size: letter 
+        }
+
+        .container {
+            display: grid;
+        }
+        
+        .ui.table{
+            border-collapse: collapse;
+        }
+
+        thead, td, th, .ui.table{
+            border: black 1px solid !important;
+        }
+        .logo{
+            float: left;
+            width: 300px;
+        }
+
+        .scan{
+            display: flex;
+            justify-content: center;
+        }
+
+        @media print {
+            header {
+                display: none!important;
+            }
+        } 
+
+        .print {
+            cursor: pointer;
+            color: #000000;
+        }
+
+        </style>
+
+    </head>
+    <body class="letter">      
+        <header>
+            <div class="ui top attached tabular menu">
+                <div class="item"><a class="print" onclick="window.print();">Print <i class="print icon"></i></a></div>
+            </div>
+        </header>
+
+        <% for(var i = 0 ; i < data.orders.length ; i++) { %>
+            <% data.orders[i].line_items.sort(function(a, b){ %>
+                <% var textA = a.sku; %>
+                <% var textB = b.sku; %>
+                <% return (textA < textB) ? -1 : (textA > textB) ? 1 : 0; %>
+            <% }); %> 
+            <section class="sheet padding-10mm">
+                <article>
+                    <div class="container">
+                        <div>
+                            <img class="logo" src="<%= storeData.logo_url %>">
+                            <p style="float: right; text-align: right; margin: 0;">
+                            <%= moment.utc(data.orders[i].created_at).format("MM/DD/YYYY") %><br />
+                            Invoice for <strong><%= data.orders[i].name %></strong>
+                            </p>
+                        </div>
+                        <div>
+                            <div style="float: left; margin: 0 0 1.5em 0;padding-top:20px;display: flex; justify-content: center; align-items: center;" >
+                                <p>
+                                <strong><%= storeData.email.substring(storeData.email.indexOf("@") + 1); %></strong><br />
+                                16443 N 91st St. #104<br/>
+                                Scottsdale, AZ 85260<br/>
+                                United States
+                                </p>
+                            </div>
+                            <% if(storeData.abbrev == "XDUS") { %>
+                                <div style="float: right; margin: 0 0 1.5em 0;display: flex; justify-content: center; align-items: center;">
+                                    <p style="float: left;">Text XDSUB to +1(833)625-0525 <br>
+                                        or scan this QR code to receive text messages <br>
+                                        about sales, product releases, and more.*</p>
+                                        <canvas style="float: right;" id="canvas"></canvas>
+                                </div>
+                            <% } %>
+                        </div>
+                            <h3 style="margin: 0 0 1em 0;">Item Details</h3>
+                        <div>
+                            <table class="ui very compact celled table" style="margin: 0 0 1.5em 0;">
+                                <thead>
+                                    <tr>
+                                        <th>Quantity</th>
+                                        <th>SKU</th>
+                                        <th>Item</th>
+                                        <th class="right aligned">Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for(var j = 0; j < data.orders[i].line_items.length; j++){ %>
+                                        <tr>
+                                            <% if(data.orders[i].line_items[j].quantity > 1) { %>
+                                                <td><strong><%= data.orders[i].line_items[j].quantity %>x</strong></td>
+                                            <% } else { %>
+                                                <td><%= data.orders[i].line_items[j].quantity %>x</td>
+                                            <% } %>
+                                            <td><%= data.orders[i].line_items[j].sku %></td>
+                                            <td><%= data.orders[i].line_items[j].name %></td>     
+                                            <td class="right aligned">$<%= data.orders[i].line_items[j].price %></td>  
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                            <h3 style="margin: 0 0 1em 0;">Payment Details</h3>
+                        <table class="ui very compact celled table" style="margin: 0 0 1.5em 0;">
+                            <tr>
+                                <td>Subtotal price:</td>
+                                <td class="right aligned">$<%= data.orders[i].subtotal_price %></td>
+                            </tr>
+                                <% if(data.orders[i].total_discounts > 0) { %>
+                                    <tr>
+                                        <td>Includes discount:
+                                            <% if(data.orders[i].discount_codes.length > 0) { %>
+                                                "<%= data.orders[i].discount_codes[0].code %>"
+                                            <% } %></td>
+                                        <td class="right aligned">-$<%= data.orders[i].total_discounts %></td>
+                                    </tr>
+                                <% } %>
+                                <% if(data.orders[i].total_tax > 0){ %>
+                                    <tr>
+                                        <td>Total tax:</td>
+                                        <td class="right aligned">$<%= data.orders[i].total_tax %></td>
+                                    </tr>
+                                <% } %>
+                                <% if(data.orders[i].shipping_lines.length > 0) { %>
+                                    <tr>
+                                        <td><h3><%= data.orders[i].shipping_lines[0].title %></h3></td>
+                                        <td class="right aligned">$<%= data.orders[i].shipping_lines[0].price %></td>
+                                    </tr>
+                                <% } %>    
+                            <tr>
+                                <td><strong>Total price:</strong></td>
+                                <td class="right aligned"><strong>$<%= data.orders[i].total_price %></strong></td>
+                            </tr>
+                        </table>
+                        <div>
+                            <div style="float: left;text-align: left;">
+                                <h3><%= data.orders[i].shipping_address.first_name %> <%= data.orders[i].shipping_address.last_name %></h3>
+                                    <% if (data.orders[i].shipping_address.company){ %>
+                                        <%= data.orders[i].shipping_address.company %><br/>
+                                    <% } %>
+                                <%= data.orders[i].shipping_address.address1 %><br/>
+                                    <% if (data.orders[i].shipping_address.address2){ %>
+                                        <%= data.orders[i].shipping_address.address2 %><br/>
+                                    <% } %>
+                                <%= data.orders[i].shipping_address.city %>, <%= data.orders[i].shipping_address.province_code %> <%= data.orders[i].shipping_address.zip %><br/>
+                                <%= data.orders[i].shipping_address.country %><br/>
+                                    <% if(data.orders[i].customer) { %>
+                                        <% if(data.orders[i].customer.total_spent > 500) { %>
+                                            <strong>***VIP Customer***</strong>
+                                        <% } %>
+                                <% } %>
+                            </div>
+                            <div class="scan" style="float: right;">
+                                <svg id="barcode<%= [i] %>"></svg>         
+                                <script type="text/javascript">JsBarcode("#barcode<%= [i] %>", "<%= data.orders[i].name %>", {
+                                width: 2,
+                                height: 50,
+                                fontSize: 23
+                                });</script>
+                            </div>
+                        </div>
+                        <div style="text-align:center; margin-top: 40px;">
+                            <p>If you have any questions, please send an email to <u><%= storeData.email %></u>.</p>
+                            <p style="font-size: 8px;">*By subscribing, you agree to receive recurring automated marketing text messages <br>
+                                (e.g. cart reminders) at the phone number provided. Consent is not a condition to purchase.<br>
+                                Msg & data rates may apply. Msg frequency varies. Reply HELP for help and STOP to cancel.<br>
+                                View our Terms of Service and Privacy Policy.
+                            </p>
+                        </div>
+                    </div>   
+                </article>
+            </section>
+        <% } %>
+    </body>
+</html>

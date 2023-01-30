@@ -1,0 +1,140 @@
+<%- include('partials/header.ejs'); %>
+<!-- <script type="text/javascript">
+  var set_message = function (message) {
+    var container = $("#message_container");
+    $(container).find("span#msg").html(message);
+    $(container)
+      .show()
+      .animate(
+        {
+          right: "10%",
+        },
+        "slow"
+      )
+      .delay(2000)
+      .fadeOut("slow", function () {
+        $("#message_container").removeAttr("style").hide();
+      });
+  };
+
+  var set_neg_message = function () {
+    var container = $("#neg_message_container");
+    $(container)
+      .show()
+      .animate(
+        {
+          right: "10%",
+        },
+        "slow"
+      )
+      .delay(2000)
+      .fadeOut("slow", function () {
+        $("#neg_message_container").removeAttr("style").hide();
+      });
+  };
+
+  function global_ajax(url, data, func) {
+    // $.alertsRemoveAll();
+    $.ajax({
+      url: url,
+      dataType: "json",
+      cache: false,
+      type: "post",
+      data: data,
+      error: function () {
+        set_neg_message();
+      },
+      success: function (data) {
+        func.call(this, data);
+        set_message(data.sku);
+      },
+    });
+  }
+  function product_stock_delta(pdv_id, element, prev_inv, sku) {
+    var e = $(element);
+    var pe = e.prev();
+    var delta = e.val();
+    var inv = parseInt(prev_inv);
+    if (delta.match(/^\-*[0-9]+$/)) {
+      delta = parseInt(delta);
+      if (delta < 0 && Math.abs(delta) > inv) {
+        inv = 0;
+      } else {
+        inv += delta;
+      }
+      e.attr("disabled", true);
+      global_ajax(
+        "/inventory",
+        {
+          prod_id: pdv_id,
+          inv: inv,
+          sku: sku,
+        },
+        function (data) {
+          pe.text(data.value);
+          e.removeAttr("disabled").val("");
+          e.attr("id", inv);
+        }
+      );
+    } else {
+      alert("Invalid number entered.");
+    }
+  }
+</script> -->
+
+<!-- <div
+  class="ui floating positive message"
+  id="message_container"
+  style="display: none;"
+>
+  <p>
+    <span id="msg"></span>
+    updated successfully
+  </p>
+</div>
+<div
+  class="ui floating negative message"
+  id="neg_message_container"
+  style="display: none;"
+>
+  <p>An error occurred.</p>
+</div> -->
+
+<h1>Some Results</h1>
+<div class="ui grid">
+  <div class="eleven wide column">
+    <table class="ui striped structured table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Variant</th>
+          <th>Sku</th>
+          <th>Warehouse</th>
+          <th>Inventory</th>
+          <th>Store</th>
+          <th>Edit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for(var i = 0;i < rows2.length; i++){ %>
+        <tr>
+          <td><%= rows2[i].title %></td>
+          <td>
+            <b><%= rows2[i].variant %></b>
+          </td>
+          <td><%= rows2[i].sku %></td>
+          <td>
+            <b><%= rows2[i].warehouse %></b>
+          </td>
+          <td><%= rows2[i].inv %></td>
+          <td><%= rows2[i].storename %></td>
+          <td>
+            <a href="../delete-product/<%= rows2[i].var_id %>">Delete</a>
+          </td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<%- include('partials/footer.ejs'); %>

@@ -1,0 +1,96 @@
+<%- include('partials/header.ejs'); %>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#products_search').typeahead({
+            name: 'searchFeedback',
+            remote: '../searchFeedback?key=%QUERY',
+            limit: 10
+        });
+        $('#message').fadeIn('slow', function () {
+            $('#message').delay(3000).fadeOut();
+        });
+    });    
+</script>
+<% if (typeof SuccessMessage !== 'undefined') { %>
+<div class="ui green message" id="message">
+    <div class="header">
+        <%= SuccessMessage %>
+    </div>
+</div>
+<% } %>
+<% if (typeof FailureMessage !== 'undefined') { %>
+<div class="ui red message" id="message">
+    <div class="header">
+        <%= FailureMessage %>
+    </div>
+</div>
+<% } %>
+<div id="content-outer">
+    <div id="content">
+        <h1>Feedback Reporter</h1>
+        <div id="content-inner">
+            <div class="page-content">
+                <h3>Enter product code or partial code below for a product to view feedback.</h3>
+                <br />
+                <form method="post" action="/searchFeedback" id="search">
+                    <table border="0" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <td>
+                                <div class='ui input'><input type="text" id="products_search" name="searchFeedback"
+                                        style="width: 300px;" value="" /></div>
+                            </td>
+                            <td valign="top">
+                                <input type="submit" value="Search" class="ui button">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <h3>Add some feedback.</h3>
+    <form action="/newsku" method="post" id="newsku">
+        <div class="ui form">
+            <div class="three fields">
+                <div class="field">
+                    <label>Customer First Name</label>
+                    <input type="text" name="firstname">
+                </div>
+                <div class="field">
+                    <label>Customer Last Name</label>
+                    <input type="text" placeholder="optional" name="lastname">
+                </div>
+                <div class="field">
+                    <label>Email</label>
+                    <input type="text" placeholder="optional" name="email">
+                </div>
+            </div>
+            <div class="three fields">
+                <div class="field">
+                    <label>Sku</label>
+                    <input type="text" placeholder="X300" name="sku">
+                </div>
+                <div class="field">
+                    <label>Source</label>
+                    <input type="text" placeholder="instagram" name="source">
+                </div>
+                <div class="field">
+                    <label>Your Name</label>
+                    <input type="text" placeholder="Michael" name="author">
+                </div>
+            </div>
+            <div class="field">
+                <div class="field">
+                    <label>Comment</label>
+                    <textarea name="comment"></textarea>
+                </div>
+            </div>
+        </div>
+        <button class="ui button" type="submit" form="newsku">Save Feedback</button>
+    </form>
+</div>
+</div>
+
+
+<%- include('partials/footer.ejs'); %>

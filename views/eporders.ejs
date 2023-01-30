@@ -1,0 +1,49 @@
+<% include partials/header %>
+<h1>Unfulfilled Epic Leopard Orders</h1>
+
+<% let d = new Date(); %>
+<% let fiveDaysAgo = d.setDate(d.getDate() - 5); %>
+<% fiveDaysAgo = new Date(fiveDaysAgo).toISOString(); %>
+<form class="ui form" action="../printpageep" method="POST">
+<table class="ui celled table">
+    <thead>
+        <tr>
+            <th class="collapsing">
+            <div class="ui fitted checkbox field" id="myCheckbox">
+                <input type="checkbox" onClick="toggle(this)"> <label></label>
+              </div>
+            </th>
+            <th>Order</th>
+            <th>Customer Name</th>
+            <th>Date</th>
+            <th>Total</th>
+        </tr>
+  </thead>
+  <tbody>
+<% for(var i = 0 ; i < data.orders.length ; i++) { %>
+    <% if(data.orders[i].created_at > fiveDaysAgo){ %>
+            <tr>
+                <td class="collapsing">
+                <div class="ui fitted checkbox">
+                <input type="checkbox" name="order" value="<%= data.orders[i].id %>"> <label></label>
+              </div>
+                <td><%= data.orders[i].name %></td>
+                <td><%= data.orders[i].shipping_address.first_name %> <%= data.orders[i].shipping_address.last_name %></td>
+                <td><%= moment.utc(data.orders[i].created_at).fromNow(); %></td>
+                <td>$<%= data.orders[i].total_price %></td>
+            </tr>
+    <% } %>
+<% } %>
+</tbody>
+</table>
+<button class="ui button" type="submit">Print Orders</button>
+</form>
+<script>
+function toggle(source) {
+  checkboxes = document.getElementsByName('order');
+  for(var i=0, n=checkboxes.length;i<n;i++) {
+    checkboxes[i].checked = source.checked;
+  }
+}
+</script>
+<% include partials/footer %>

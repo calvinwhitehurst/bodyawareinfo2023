@@ -1,0 +1,52 @@
+<%- include('partials/header.ejs'); %>
+<h1>Sales Insights2</h1>
+<% for (var i = 0; i < data.length; i++) { %>
+<% for (var j = 0; j < data[i].orders.length; j++) { %>
+<% data[i].orders[j].total_price = parseFloat(data[i].orders[j].total_price); %>
+<% data[i].orders[j].name = data[i].orders[j].name.replace(/[^a-zA-Z]/g, ''); %>
+
+<% } %>
+<% } %>
+
+
+<script type="text/javascript">
+    var finalData = <% - JSON.stringify(data) %>;
+    var data = [];
+    for (var j = 0; j < finalData.length; j++) {
+        data[j] = [];
+        var object = {};
+        for (var i = 0; i < finalData[j].orders.length; i++) {
+            var date = finalData[j].orders[i].created_at;
+            var localDateString = (new Date(date).getMonth() + 1) + '-' + new Date(date).getDate() + '-' + new Date(date).getFullYear();
+            if (object[localDateString]) {
+                if (finalData[j].orders[i].name === "BAUS") {
+                    object[localDateString].BAUS = parseFloat(object[localDateString].total_price.toFixed(2));
+                } else if (finalData[j].orders[i].name === "XDUS") {
+                    object[localDateString].XDUS = parseFloat(object[localDateString].total_price.toFixed(2));
+                } else if (finalData[j].orders[i].name === "EL") {
+                    object[localDateString].ELUS = parseFloat(object[localDateString].total_price.toFixed(2));
+                } else if (finalData[j].orders[i].name === "BAGB") {
+                    object[localDateString].BAGB = parseFloat(object[localDateString].total_price.toFixed(2));
+                } else {
+                    object[localDateString].XDGB = parseFloat(object[localDateString].total_price.toFixed(2));
+                }
+                delete finalData[j].orders[i].total_price;
+            } else {
+                finalData[j].orders[i].Date = localDateString;
+
+                delete finalData[j].orders[i].created_at;
+                delete finalData[j].orders[i].name;
+                object[localDateString] = finalData[j].orders[i];
+            }
+        }
+        for (var prop in object) {
+            data[j].push(object[prop]);
+        }
+    }
+    //  console.log(data);
+
+
+</script>
+
+
+<%- include('partials/footer.ejs'); %>

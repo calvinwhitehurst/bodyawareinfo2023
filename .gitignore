@@ -1,0 +1,12 @@
+node_modules
+uploads
+img
+gif
+semantic
+wav
+js
+logs
+config
+routes/custom_modules/queries.js
+routes/printorder.js
+routes/passwordreset.js

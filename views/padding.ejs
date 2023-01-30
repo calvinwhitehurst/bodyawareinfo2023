@@ -1,0 +1,27 @@
+{{#section 'padding'}}
+<script type="text/javascript">
+var x;
+x = 0;
+var prints, _key_;
+	for (_key_ in prints) {
+		var print;
+		print = prints[_key_];
+		var y, print;
+
+    for (y = 0; y < print["quantity"]; y++) {
+        x++;
+        document.write('<td><div class="label-container"');
+        if (x % 4 == 0) {
+        	document.write('style="padding-left: 10px;"');
+        }
+        document.write('><div class="product-code">{{code}}</div><div class="product-size">{{size}}</div><div class="product-name">{{name}}</div></div></td>');
+        if (x % 4 == 0) {
+        	document.write('</tr><tr>');
+        }
+        if (!(x % 80)) {
+        	document.write('</tr></table><span class="page-break"></span><div class="spacer"></div><table><tr>');
+        }
+    }
+	};
+</script>
+{{/section}}

@@ -1,0 +1,42 @@
+<%- include('partials/header.ejs'); %>
+<div id="content-outer">
+    <div id="content">
+        <div id="content-inner">
+            <div class="page-content">
+                <table class="ui celled table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Sku</th>
+                            <th>Variant</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(var i = 0; i < obj.length; i++) { %>
+                        <tr>
+                            <td><%= obj[i].title1 %></td>
+                            <td><%= obj[i].sku %></td>
+                            <td><%= obj[i].title %></td>
+                            <form class="ui form" method="post" action="/inventoryPageTable">
+                                <td>
+                                    <div class="ui action input">
+                                        <input type="hidden" name="inv_id" value="<%= obj[i].inv_id %>">
+                                        <input type="text" maxlength="2" size="2" value="<%= obj[i].inv %>"
+                                            class="arrow-togglable" name="count">
+                                        <input type="submit" value="Change" class="ui button">
+                                    </div>
+                                </td>
+                            </form>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <a href="../inventoryPage"><i>Back to search</i></a>
+        </div>
+    </div>
+</div>
+
+
+<%- include('partials/footer.ejs'); %>
