@@ -47,7 +47,7 @@ var queries = require("./routes/custom_modules/queries.js");
 var passwordreset = require("./routes/passwordreset.js");
 var manufacturing = require("./routes/manufacturing.js");
 var printShoesList = require("./routes/printShoesList.js");
-var options = require("./config/options.js")
+var adddiscountcode = require("./routes/discountcodes.js");
 const limit = rateLimit({
   max: 30, // max requests
   windowMs: 60 * 60 * 1000, // 1 Hour
@@ -92,6 +92,17 @@ function numberWithCommas(x) {
 }
 
 app.use(morgan("dev", { skip: skipLog }));
+var options = {
+  host: "localhost",
+  port: 3306,
+  user: "",
+  password: "",
+  database: "",
+  clearExpired: true,
+  checkExpirationInterval: 900000,
+  expiration: 1800000,
+  endConnectionOnClose: true,
+};
 
 var sessionStore = new MySQLStore(options);
 //app.use(cookieParser());
@@ -127,6 +138,7 @@ app.use(passwordreset);
 app.use(taxAndHarms);
 app.use(manufacturing);
 app.use(printShoesList);
+app.use(adddiscountcode);
 
 app.use("/product_view", productview);
 app.use("/productImg", productImg);

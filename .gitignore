@@ -10,3 +10,15 @@ config
 routes/custom_modules/queries.js
 routes/printorder.js
 routes/passwordreset.js
+public/muppets/1.gif
+public/muppets/2.gif
+public/muppets/3.gif
+public/muppets/4.gif
+public/muppets/5.gif
+public/muppets/6.gif
+public/muppets/7.gif
+public/muppets/8.gif
+public/muppets/9.gif
+public/muppets/10.gif
+public/muppets/11.gif
+public/muppets/12.gif

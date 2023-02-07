@@ -1,0 +1,73 @@
+<%- include('partials/header.ejs'); %>
+<script type="text/javascript">
+</script>
+<div>
+  <h1>Add Discount Code</h1>
+  <h5>Create a discount code in Shopify for a specific store, copy it's application link, paste the link below, and add a message. <br> 
+  A QR code will be generated for your link and will show up in the invoice of your store as well as your message.</h5>
+  <div class="ui form">
+    <form method="post" action="/addDiscount" style="display: inline-block;">
+      <div class="field" style="width: 400px;">
+        <div class='ui input'>
+          <input type="text" id="add_title" size="400" placeholder="Title" name="title[]" value="" />
+        </div>
+      </div>
+      <div class="field" style="width: 400px;">
+        <div class='ui input'>
+          <input type="text" id="add_link" placeholder="Link" name="link[]" value="" />
+        </div>
+      </div>
+      <div class="field" style="width: 400px;">
+        <div class="ui input">
+          <textarea id="add_message" placeholder="Message" name="message[]" value=""></textarea>
+        </div>
+      </div>
+      <div class="field" style="width: 400px;">
+        <label>Start Date</label>
+        <div class="ui calendar" id="rangestart">
+          <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="text" placeholder="Start" value="" name="start_date">
+          </div>
+        </div>
+      </div>
+      <div class="field" style="width: 400px;">
+        <label>End Date</label>
+        <div class="ui calendar" id="rangeend">
+          <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="text" placeholder="End" value="" name="end_date">
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <select class="ui dropdown" name="store" style="width: 400px;" >
+            <option value="">Store</option>
+            <option value="0">Body Aware</option>
+            <option value="1">XDress</option>
+        </select>
+      </div>
+      <div class="field">
+        <div class="ui checkbox">
+          <input type="checkbox" tabindex="0" class="hidden">
+          <label>Active</label>
+        </div>
+      </div>
+      <br />
+    <input type="submit" class="add_altered ui button" value="Submit" />
+    <h4 style="margin-left: 1px;"></h4>
+    <br />
+    </form>
+  </div>
+</div>
+<script>
+    $('#rangestart').calendar({
+      type: 'date',
+      endCalendar: $('#rangeend')
+    });
+    $('#rangeend').calendar({
+      type: 'date',
+      startCalendar: $('#rangestart')
+    });
+</script>
+<%- include('partials/footer.ejs'); %>
