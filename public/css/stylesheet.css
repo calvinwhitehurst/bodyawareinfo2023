@@ -154,6 +154,12 @@ path.domain {
   margin-top: 23px;
 }
 
+#the-count {
+  float: right;
+  padding: 0.1rem 0 0 0;
+  font-size: 0.875rem;
+}
+
 /* .tt-dropdown-menu {
 	border: solid 1px rgb(112, 112, 112);
 	width: 300px;

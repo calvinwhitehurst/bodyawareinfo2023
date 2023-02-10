@@ -9,17 +9,21 @@
     <form method="post" action="/addDiscount" style="display: inline-block;">
       <div class="field" style="width: 400px;">
         <div class='ui input'>
-          <input type="text" id="add_title" size="400" placeholder="Title" name="title[]" value="" />
+          <input type="text" id="add_title" size="400" placeholder="Title" name="title[]" value="" required/>
         </div>
       </div>
       <div class="field" style="width: 400px;">
         <div class='ui input'>
-          <input type="text" id="add_link" placeholder="Link" name="link[]" value="" />
+          <input type="url" id="add_link" placeholder="Link" name="link[]" value="" required/>
         </div>
       </div>
       <div class="field" style="width: 400px;">
         <div class="ui input">
-          <textarea id="add_message" placeholder="Message" name="message[]" value=""></textarea>
+          <textarea id="add_message" placeholder="Message" name="message[]" value="" maxlength="300" required></textarea>
+        </div>
+        <div id="the-count">
+          <span id="current">0</span>
+          <span id="maximum">/ 300</span>
         </div>
       </div>
       <div class="field" style="width: 400px;">
@@ -27,7 +31,7 @@
         <div class="ui calendar" id="rangestart">
           <div class="ui input left icon">
             <i class="calendar icon"></i>
-            <input type="text" placeholder="Start" value="" name="start_date">
+            <input type="text" placeholder="Start" value="" name="start_date[]" required>
           </div>
         </div>
       </div>
@@ -36,20 +40,23 @@
         <div class="ui calendar" id="rangeend">
           <div class="ui input left icon">
             <i class="calendar icon"></i>
-            <input type="text" placeholder="End" value="" name="end_date">
+            <input type="text" placeholder="End" value="" name="end_date[]" required>
           </div>
         </div>
       </div>
       <div class="field">
-        <select class="ui dropdown" name="store" style="width: 400px;" >
-            <option value="">Store</option>
-            <option value="0">Body Aware</option>
-            <option value="1">XDress</option>
+        <select class="ui dropdown" name="store" style="width: 400px;" required>
+          <option value="">Store</option>
+          <% rows.forEach(function(row){ %>
+            <% if(row.country !=2){ %>
+            <option value="<%- row.id %>"><%- row.name %></option>
+            <% } %>
+          <% }); %>
         </select>
       </div>
       <div class="field">
         <div class="ui checkbox">
-          <input type="checkbox" tabindex="0" class="hidden">
+          <input type="checkbox" name="active[]">
           <label>Active</label>
         </div>
       </div>
@@ -69,5 +76,43 @@
       type: 'date',
       startCalendar: $('#rangestart')
     });
+    $('textarea').keyup(function() {
+    
+    var characterCount = $(this).val().length,
+        current = $('#current'),
+        maximum = $('#maximum'),
+        theCount = $('#the-count');
+      
+    current.text(characterCount);
+   
+    
+    /*This isn't entirely necessary, just playin around*/
+    if (characterCount < 70) {
+      current.css('color', '#666');
+    }
+    if (characterCount > 70 && characterCount < 90) {
+      current.css('color', '#6d5555');
+    }
+    if (characterCount > 90 && characterCount < 100) {
+      current.css('color', '#793535');
+    }
+    if (characterCount > 100 && characterCount < 120) {
+      current.css('color', '#841c1c');
+    }
+    if (characterCount > 120 && characterCount < 139) {
+      current.css('color', '#8f0001');
+    }
+    
+    if (characterCount >= 140) {
+      maximum.css('color', '#8f0001');
+      current.css('color', '#8f0001');
+      theCount.css('font-weight','bold');
+    } else {
+      maximum.css('color','#666');
+      theCount.css('font-weight','normal');
+    }
+    
+        
+  });
 </script>
 <%- include('partials/footer.ejs'); %>
