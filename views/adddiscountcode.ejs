@@ -62,12 +62,87 @@
       </div>
       <br />
     <input type="submit" class="add_altered ui button" value="Submit" />
-    <h4 style="margin-left: 1px;"></h4>
     <br />
     </form>
   </div>
 </div>
+<% if(rows2.length != 0){ %>
+  <h3>Discounts Currently Available</h3>
+  <% for (var i = 0;i < rows2.length;i++){ %>
+    <div class="ui card" style="display: inline-block;">
+      <div class="content">
+        <div class="header inline"><%= rows2[i].title %></div>
+        <div class="right floated inline"><a class="edit" data-id="<%= rows2[i].id %>" href="#">Edit</a></div>
+      </div>
+      <div class="content">
+        <div class="description">
+          <p><b>Link: </b><%= rows2[i].link %></p>
+          <p><b>Active: </b><%= rows2[i].active %></p>
+          <p><b>Message: </b><%= rows2[i].message %></p>
+          <p><b>Start Date: </b><%= rows2[i].start_date %></p>
+          <p><b>End Date: </b><%= rows2[i].end_date %></p>
+        </div>
+      </div>
+    </div>
+  <% } %>
+    <% }else{ %>
+    <p style="padding: 15px;">No discounts created.</p>
+    <% } %>
+    <% for (var i = 0;i < rows2.length;i++){ %>
+      <div class="ui mini modal" id="modal-<%= rows2[i].id %>">
+        <div class="header">
+          Edit <%= rows2[i].name %> Discount
+        </div>
+        <div class="content">
+          <form class="ui form" method="post" action="/editDiscountCode/<%= rows2[i].id %>">
+            <div class="field">
+              <label>Discount Message Name</label>
+              <input type="text" name="[title]" value="<%= rows2[i].title %>">
+            </div>
+            <div class="field">
+              <label>Discount Url</label>
+              <input type="text" name="[link]" value="<%= rows2[i].link %>">
+            </div>
+            <div class="field">
+              <label>Active</label>
+              <input type="text" name="[active]" value="<%= rows2[i].active %>">
+            </div>
+            <div class="field">
+              <label>Message</label>
+              <textarea name="[message]" value="<%= rows2[i].message %>"></textarea>
+            </div>
+            <div>
+              <a href="/deleteDiscount/<%= rows2[i].id %>">Delete Message</a>
+            </div>
+        </div>
+        <div class="actions">
+          <div class="ui negative button">
+            Cancel
+          </div>
+          <button class="ui positive right labeled icon button" type="submit">
+            Submit
+            <i class="checkmark icon"></i>
+          </button>
+          </form>
+        </div>
+      </div>
+    <% } %>
 <script>
+    $(function () {
+    $("#test").click(function () {
+      $(".test").modal('show');
+    });
+    $(".test").modal({
+      closable: true
+    });
+    $(".edit").click(function (event) {
+      var card_clicked = $(this).attr('data-id');
+      $("#modal-" + card_clicked).modal('show');
+    });
+    $("#modal-" + card_clicked).modal({
+      closable: true
+    });
+  });
     $('#rangestart').calendar({
       type: 'date',
       endCalendar: $('#rangeend')

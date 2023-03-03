@@ -78,12 +78,21 @@
                                 United States
                                 </p>
                             </div>
-                            <% if(storeData.abbrev == "XDUS") { %>
-                                <div style="float: right; margin: 0 0 1.5em 0;display: flex; justify-content: center; align-items: center;">
-                                    <p style="float: left;">Text XDSUB to +1(833)625-0525 <br>
-                                        or scan this QR code to receive text messages <br>
-                                        about sales, product releases, and more.*</p>
-                                        <canvas style="float: right;" id="canvas"></canvas>
+                            <% if(qr_code){ %>
+                                <div style="width: 60%; float: right; margin: 0 0 1.5em 0;display: flex; justify-content: center; align-items: center;">
+                                    <p style="float: left;"><%= discountData.message %></p>
+                                    <img style="float: right;" src="<%= qr_code %>" />
+                                </div>
+                            
+                            <% } else if(typeof qr_code === 'undefined' && storeData.abbrev == "XDUS") { %>
+                                <div style="width: 60%; float: right; margin: 0 0 1.5em 0;display: flex; justify-content: center; align-items: center;">
+                                    <p style="float: left;">Text XDSUB to +1(833)625-0525 or scan this QR code to receive text messages about sales, product releases, and more.*</p>
+                                    <img style="float: right;" src="../img/xdressqrcode.svg" />
+                                </div>
+                            <% } else if(typeof qr_code === 'undefined' && storeData.abbrev == "BAUS") { %>
+                                <div style="width: 60%; float: right; margin: 0 0 1.5em 0;display: flex; justify-content: center; align-items: center;">
+                                    <p style="float: left;">Text BASUB to +1(844)906-3624 or scan this QR code to receive text messages about sales, product releases, and more.*</p>
+                                    <img style="float: right;" src="../img/bodyawareqrcode.svg" />
                                 </div>
                             <% } %>
                         </div>
@@ -175,11 +184,13 @@
                         </div>
                         <div style="text-align:center; margin-top: 40px;">
                             <p>If you have any questions, please send an email to <u><%= storeData.email %></u>.</p>
+                            <% if(typeof qr_code === 'undefined'){ %>
                             <p style="font-size: 8px;">*By subscribing, you agree to receive recurring automated marketing text messages <br>
                                 (e.g. cart reminders) at the phone number provided. Consent is not a condition to purchase.<br>
                                 Msg & data rates may apply. Msg frequency varies. Reply HELP for help and STOP to cancel.<br>
                                 View our Terms of Service and Privacy Policy.
                             </p>
+                            <% } %>
                         </div>
                     </div>   
                 </article>

@@ -6,14 +6,15 @@ const router = express.Router()
 
 router.get('/adddiscountcode', isLoggedIn, (req, res) => {
   connection.query(
-    queries.stores + queries.userName,
+    queries.stores + queries.getAllDiscounts + queries.userName,
     req.user.username,
     (err, rows) => {
       if (err) console.log(err)
       res.render('adddiscountcode', {
         user: req.user,
         rows: rows[0],
-        profile: rows[1][0]
+        rows2: rows[1],
+        profile: rows[2][0]
       })
     }
   )
